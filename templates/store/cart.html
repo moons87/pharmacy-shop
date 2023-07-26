@@ -1,0 +1,132 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+    <!-- ============================ COMPONENT 1 ================================= -->
+    {% if not cart_items %}
+     <h2 class="text-center">Ваша корзина пусто</h2>
+     <p class="text-center">Но это легко исправить :)</p>
+     <br>
+     <div class="text-center">
+        <a href="{% url 'store' %}" class="btn btn-primary">Перейти к покупкам</a>
+     </div>
+    {% else %}
+    {% if pharmacy %}
+    <p>Selected Pharmacy: {{ pharmacy.name }}</p>
+    {% endif %}
+    <div class="site-section">
+        <div class="container">
+          <div class="row mb-5">
+            <div class="site-blocks-table">
+                <table class="table table-bordered">
+                    <thead class="text-muted">
+                        <tr class="small text-uppercase">
+                            <th class="product-thumbnail">Фото</th>
+                            <th class="product-name">Название</th>
+                            <th class="product-price">Цена</th>
+                            <th class="product-quantity">Количество</th>
+                            <th class="product-total">Итого</th>
+                            <th class="product-remove">Удалить</th>
+
+                        </tr>
+    </thead>
+    <tbody>
+
+    {% for cart_item in cart_items %}
+    <tr>
+        <td class="product-thumbnail">
+          <img src="{{ cart_item.product.images.url }}" alt="Image" class="img-fluid">
+        </td>
+        <td class="product-name">
+          <a href="{{ cart_item.product.get_url }}" class="h5 text-black">{{ cart_item.product.product_name }}</a>
+        </td>
+        <td>{{ cart_item.product.price }} ₸</td>
+        <td>
+            <!-- col.// -->
+                        <div class="col"> 
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="btn btn-light" id="button-plus">&minus;</a>
+                                </div>
+                                <input type="text" class="form-control text-center"  value="{{ cart_item.quantity }}">
+                                <div class="input-group-append">
+                                    <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                                        {% csrf_token %}
+                                        
+                                        <button class="btn btn-light" type="submit" id="button-minus">&plus;</button>
+                                    </form>    
+                            </div>
+                            </div> <!-- input-group.// -->
+                        </div> <!-- col.// -->
+        </td>
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">{{ cart_item.sub_total }} ₸</var> 
+               
+            </div> <!-- price-wrap .// -->
+        </td>
+        <td class="text-right"> 
+        <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id  %}" onclick="return " class="btn btn-primary height-auto btn-sm">X</a>
+        </td>
+    </tr>
+   {% endfor %}
+    </tbody>
+    </table>
+    </div> <!-- card.// -->
+    
+        </aside> <!-- col.// -->
+        
+    
+    
+    </div> <!-- row.// -->
+    
+    <!-- ============================ COMPONENT 1 END .// ================================= -->
+    <div class="row">
+        <div class="col-md-6">
+          <div class="row mb-5">
+            
+            <div class="col-md-6">
+              <a href="{% url 'store' %}"><button class="btn btn-outline-primary btn-md btn-block" >Продолжить покупки</button></a>
+            </div>
+          </div>
+          
+        </div>
+        <div class="col-md-6 pl-5">
+          <div class="row justify-content-end">
+            <div class="col-md-7">
+              <div class="row">
+                <div class="col-md-12 text-right border-bottom mb-5">
+                  <h3 class="text-black h4 text-uppercase">Итого корзины</h3>
+                </div>
+              </div>
+
+                
+              <div class="row mb-5">
+                <div class="col-md-6">
+                  <span class="text-black">Итого</span>
+                </div>
+                <div class="col-md-6 text-right">
+                  <strong class="text-black">{{ total }} ₸</strong>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-md-12">
+                  <button class="btn btn-primary btn-lg btn-block" onclick="window.location='{% url 'checkout' %}'">Подтвердить</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div> <!-- container .//  -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    {% endif %}
+
+{% endblock %}

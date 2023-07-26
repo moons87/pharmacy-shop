@@ -1,0 +1,70 @@
+{% load static %}
+<div class="site-wrap">
+
+
+    <div class="site-navbar py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="{% url 'search' %}" method="GET">
+            <input type="text" class="form-control" placeholder="Найдите ключевое слово и нажмите enter..." name="keyword">
+          </form>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="{% url 'home' %}" class="js-logo-clone">Medialab</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li><a href="{% url 'home' %}">Главный</a></li>
+                <li><a href="{% url 'store' %}">Аптека</a></li>
+                <li class="has-children">
+                    <a href="{% url 'store' %}">Категории</a>
+                    <ul class="dropdown">
+                    {% for category in links %}
+                      <li><a href="{{category.get_url}}">{{category.category_name}}</a></li>
+                    {% endfor %}
+                    </ul>
+                  </li>
+                <li><a href="{% url 'about' %}">О нас</a></li>
+                <li><a href="tel://87768888501">Контакты</a></li>
+               
+                
+              </ul>
+            </nav>
+          </div>
+          <div class="icons">
+            <div class="d-flex justify-content-end mb-3 mb-lg-0">
+                {% if user.id is None %}
+                
+                        <a href="{% url 'login' %}">Вход</a> <span class="dark-transp"> | </span>
+                        <a href="{% url 'register' %}"> Регистрация</a>
+                    </div>
+                </div>
+                {% else  %}
+                <div class="widget-header">
+                    <small class="title text-muted">Добро пожаловать, {{user.first_name}}!</small>
+                    <div> 
+                        <a href="{% url 'logout' %}"> Выход</a>
+                    </div>
+                </div>
+                {% endif %}
+                <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            <a href="{% url 'cart' %}" class="icons-btn d-inline-block bag">
+              <span class="icon-shopping-bag"></span>
+              <span class="number">{{cart_count}}</span>
+            </a>
+            <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
+                class="icon-menu"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>

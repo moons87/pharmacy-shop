@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="section-content padding-y bg">
+    <div class="container">
+    
+    <!-- ============================ COMPONENT 1 ================================= -->
+    <form action="{% url 'add_cart' single_product.id %}" method="POST">
+        {% csrf_token %}
+          <article class="content-body">
+    <div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'home' %}">Главный</a> <span class="mx-2 mb-0">/</span> <a
+                href="{% url 'store' %}">Аптека</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">{{ single_product.product_name }}</strong></div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="site-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-5 mr-auto">
+              <div class="border text-center">
+                <img src="{{single_product.images.url}}" alt="Image" class="img-fluid p-5">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h2 class="text-black">{{ single_product.product_name }}</h2>
+              
+            
+              <p>{{ single_product.description }}</p>
+              
+              <p><strong class="text-primary h4">{{ single_product.price }} ₸</strong></p>
+              
+              {% if single_product.stock <= 0 %}
+              <p class="text-danger"> Нет в наличии </p>
+              {% else %}
+              <button type="submit" class="btn btn-primary"> <span class="text">Добавить в корзину</span> <i class="fas fa-shopping-cart"></i>  </button>
+              {% endif %}
+              <div class="mt-5">
+                <ul class="nav nav-pills mb-3 custom-pill" id="pills-tab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+                      aria-controls="pills-home" aria-selected="true">Больше информации</a>
+                  </li>
+                 
+              
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table custom-table">
+                      <thead>
+                        <th>Производитель</th>
+                        <th>Страна производителя</th>
+                        <th>Количество в упаковке</th>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">{{ single_product.manufacturer }}</th>
+                          <td>{{ single_product.country }}</td>
+                          <td>{{ single_product.measurement }}</td>
+                        </tr>
+                       
+                        
+                      </tbody>
+                    </table>
+                  </div>
+              
+                </div>
+              </div>
+  
+      
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+    </form>
+    
+    <br>
+    
+    <div class="row">
+        <div class="col-md-9">
+          <h5 class="my-3">Цены в других аптеках:</h5>
+          {% for pharmacy_price in single_product.pharmacyproductprice_set.all %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ pharmacy_price.product.product_name }}</h5>
+      
+      <a href="{{pharmacy_price.pharmacy.url}}"><h5 class="card-title">{{ pharmacy_price.pharmacy.name }}</h5></a>
+      <h5 class="card-title">{{ pharmacy_price.pharmacy.location }}</h5>
+      <p class="card-text">{{ pharmacy_price.price }} ₸</p>
+     
+        <input type="hidden" name="pharmacy_product_price_id" value="{{ pharmacy_price.id }}">
+        {% if single_product.stock <= 0 %}
+          <button type="submit" class="btn btn-primary" disabled> Нет в наличии </button>
+        {% else %}
+        <a href="{{pharmacy_price.pharmacy.url}}"><button type="submit" class="btn btn-primary"> <span class="text">К сайту</span> <i class="fas fa-shopping-cart"></i>  </button></a>
+        {% endif %}
+      
+    </div>
+  </div>
+{% endfor %}
+
+    
+        
+    
+        </div> <!-- col.// -->
+    </div> <!-- row.// -->
+    
+    
+    </div> <!-- container .//  -->
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    
+
+{% endblock %}

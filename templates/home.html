@@ -1,0 +1,100 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- ========================= SECTION MAIN ========================= -->
+<div class="site-blocks-cover" style="background-image: url({% static 'images/hero_1.jpg' %});">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 mx-auto order-lg-2 align-self-center">
+          <div class="site-block-cover-content text-center">
+            <h2 class="sub-title">Эффективные медикаменты, новые медикаменты каждый день</h2>
+            <h1>Добро пожаловать Medialab</h1>
+            <p>
+              <a href="{% url 'store' %}" class="btn btn-primary px-5 py-3">Купить сейчас</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="site-section">
+    <div class="container">
+      <div class="row align-items-stretch section-overlap justify-content-center">
+        <div class="col-md-6 col-lg-6 mb-4 mb-lg-0">
+          <div class="banner-wrap bg-primary h-100">
+            <a href="#" class="h-100">
+              <h5>Бесплатная <br> Доставка</h5>
+              <p>
+                Купите медикаменты у нас
+                <strong>Курьер доставит вам медикаменты, бесплатно.</strong>
+              </p>
+            </a>
+          </div>
+        </div>
+        
+        
+
+      </div>
+    </div>
+  </div>
+
+  
+  
+  <div class="site-section bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="title-section text-center col-12">
+          <h2 class="text-uppercase">Новые медикаменты</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 block-3 products-wrap">
+          <div class="nonloop-block-3 owl-carousel">
+            {% for product in products|slice:":6"%}
+            <div class="text-center item mb-4">
+              <a href="{{ product.get_url }}"> <img src="{{ product.images.url }}" alt="Image"></a>
+              <h3 class="text-dark"><a href="{{ product.get_url }}">{{ product.product_name }}</a></h3>
+              <p class="price">{{ product.price }} ₸</p>
+            </div>
+
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <div class="site-section bg-secondary bg-image" style="background-image: url('{% static 'images/bg_2.jpg' %}');">
+    <div class="container">
+      <div class="row align-items-stretch">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <a href="#" class="banner-1 h-100 d-flex" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+            <div class="banner-1-inner align-self-center">
+              <h2>Medialab </h2>
+                  <p>Это онлайн-центр медицинских медикаментов. 
+                  </p>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <a href="#" class="banner-1 h-100 d-flex" style="background-image: url('{% static 'images/bg_2.jpg' %}');">
+            <div class="banner-1-inner ml-auto  align-self-center">
+              <h2>Эксперты говорят</h2>
+                  <p>Самым популярным и продаваемым лекарственным средством в период пандемии по количеству проданных упаковок стал парацетомол.
+                  </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

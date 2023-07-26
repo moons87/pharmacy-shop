@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<section class="section-content padding-y bg">
+	<div class="container">
+
+		<!-- ============================ COMPONENT 1 ================================= -->
+		
+		<div class="row mb-5">
+			<div class="col-md-12">
+			  <h2 class="h3 mb-3 text-black">Ваш заказ</h2>
+			  <div class="p-3 p-lg-5 border">
+				<table class="table site-block-order-table mb-5">
+				  <thead>
+					<th>Имя </th>
+					<th>Итого</th>
+				  </thead>
+				  <tbody>
+					{% for cart_item in cart_items %}
+					<tr>
+					  <td>{{ cart_item.product.product_name }} <strong class="mx-2">x</strong> {{cart_item.quantity}}</td>
+					  <td>{{cart_item.sub_total}}</td>
+					</tr>
+					
+		
+					<tr>
+					  <td class="text-black font-weight-bold"><strong>Итого заказа</strong></td>
+					  <td class="text-black font-weight-bold"><strong>{{cart_item.sub_total}}</strong></td>
+					</tr>
+				  </tbody>
+				  {% endfor %}
+				</table>
+				<h3 class="h3 mb-3 text-black">Методы оплаты</h3>
+				<div class="border mb-3">
+				  <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button"
+					  aria-expanded="false" aria-controls="collapsebank">Visa/Mastercard</a></h3>
+  
+				  <div class="collapse" id="collapsebank">
+					<div class="py-2 px-4">
+					  <p class="mb-0">Скоро добавим способ оплаты через Visa</p>
+					</div>
+				  </div>
+				</div>
+  
+  
+				<div class="border mb-5">
+				  <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button"
+					  aria-expanded="false" aria-controls="collapsepaypal">Paypal</a></h3>
+  
+				  <div class="collapse" id="collapsepaypal">
+					<div class="py-2 px-4">
+					  <p class="mb-0">Скоро добавим способ оплаты Paypal</p>
+					</div>
+				  </div>
+				</div>
+
+				<div class="border mb-3">
+					<h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsecash" role="button"
+						aria-expanded="false" aria-controls="collapsecash">Наличными</a></h3>
+						<div class="collapse" id="collapsecash">
+						
+						<div class="card">
+					<div class="card-body">
+						<dl class="dlist-align">
+							<dt>Всего:</dt>
+							<dd class="text-right">{{total}} ₸</dd>
+						</dl>
+						
+						<hr>
+						
+							<label><input type="radio" name="payment_method" >Оплата наличными</label><br>
+							<script>
+								function getCookie(name) {
+								  let cookieValue = null;
+								  if (document.cookie && document.cookie !== '') {
+									  const cookies = document.cookie.split(';');
+									  for (let i = 0; i < cookies.length; i++) {
+										  const cookie = cookies[i].trim();
+										  // Does this cookie string begin with the name we want?
+										  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+											  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+											  break;
+										  }
+									  }
+								  }
+								  return cookieValue;
+							  }
+							  var amount = 3000
+							  var url = "{% url 'payments' %}"
+							  var csrftoken = getCookie('csrftoken');
+							  var orderID = "{{order.order_number}}"
+							  var payment_method = 'Cash'
+							  var redirect_url = "{% url 'order_complete' %}"
+							  var details = {
+								id: 3000
+								};
+							  // Function to handle cash payment
+							  function handleCashPayment() {
+								  // Send data to server
+								  sendData();
+							  
+								  // Display success message
+								  alert("Платеж прошел!");
+							  
+								  // Redirect to order complete page
+								  window.location.href = redirect_url + '?order_number=' + orderID + '&payment_method=' + payment_method;
+							  }
+							  
+							  // Function to send data to server
+							  function sendData() {
+								  fetch(url, {
+									  method : "POST",
+									  headers: {
+										  "Content-type": "application/json",
+										  "X-CSRFToken": csrftoken,
+									  },
+									  body: JSON.stringify({
+										  orderID: orderID,
+										  transID: details.id,
+										  payment_method: payment_method,
+										  status: 'Success',
+									  }),
+								  })
+								  .then((response) => response.json())
+								  .then((data) => {
+									transID = data.transID;
+									window.location.replace(redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID);
+								  });
+							  }
+							  </script>
+							  
+							  <!-- Cash payment button -->
+							  <button class="btn-success" onclick="handleCashPayment()">Оплатить наличными при доставке</button>
+							</div>  
+							</div>
+							</div>
+							</div>
+						</div>
+
+					</div> 
+				</div> 
+			
+
+
+		</div> <!-- row.// -->
+	</div> 
+
+{% endblock %}

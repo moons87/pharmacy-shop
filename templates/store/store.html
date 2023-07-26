@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="section-pagetop bg">
+    <div class="container">
+        {% if 'search' in request.path %}
+        <h2 class="title-page">Поиск</h2>
+        {% else %}
+        <h2 class="title-page">Аптека</h2>
+        {% endif %}
+    </div> <!-- container //  -->
+    </section>
+ 
+    <div class="bg-light py-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 mb-0"><a href="{% url 'home' %}">Главный</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Аптека</strong></div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="site-section">
+        <div class="container">
+          <header class="border-bottom mb-4 pb-3">
+            <div class="form-inline">
+              <span class="mr-md-auto"><b>{{ product_count }}</b> найдено </span>
+              <form method="get" action="{% url 'store' %}">
+                <div class="input-group" style="float: right;">
+                  <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-outline-secondary">Сортировка по ценам</button>
+                  </div>
+                  <select name="sort" class="form-control border-0">
+                    <option value="asc" {% if request.GET.sort == 'asc' %}selected{% endif %}>С дешевых к дорогому</option>
+                   <option value="desc" {% if request.GET.sort == 'desc' %}selected{% endif %}>С дорогого к дешевому</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="card-body">
+
+        
+      
+            </div> <!-- card-body.// -->
+        </header><!-- sect-heading -->
+          <div class="row">
+            {% if products %}
+            {% for product in products %}
+            <div class="col-sm-6 col-lg-3 text-center item mb-4">
+              <a href="{{ product.get_url }}"> <img src="{{ product.images.url }}" alt="Image"></a>
+             <a href="{{ product.get_url }}" class="text-dark">{{ product.product_name }}</a>
+              <p class="price">{{ product.price }} ₸</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div>
+              <h2>Нет результатов, попробуйте еще</h2>
+            </div>
+            {% endif %}
+          </div>
+          <div class="row mt-5">
+            <div class="col-md-12 text-center">
+              <div class="site-block-27">
+                {% if products.has_other_pages %}
+                <ul>
+                    {% if products.has_previous %}
+                  <li><a href="?page={{products.previous_page_number}}">&lt;</a></li>
+                    {% else %}
+                  <li><a href="#">&lt;</a></li>
+                    {% endif %}
+
+                    {% for i in products.paginator.page_range %}
+				        {% if products.number == i %}
+                        <li class="active"><span>{{i}}</span></li>
+                        {% else %}
+                        <li><a href="?page={{i}}">{{i}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                    <li><a href="?page={{products.next_page_number}}">&gt;</a></li>
+                    {% else %}
+                    <li><a href="#">&gt;</a></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      
+      <div class="site-section bg-secondary bg-image" style="background-image: url({% static 'images/bg_2.jpg'%});">
+        <div class="container">
+          <div class="row align-items-stretch">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+              <a href="#" class="banner-1 h-100 d-flex" style="background-image: url({% static 'images/bg_1.jpg' %});">
+                <div class="banner-1-inner align-self-center">
+                  <h2>Medilab </h2>
+                  <p>Это онлайн-центр медицинских медикаментов. 
+                  </p>
+                </div>
+              </a>
+            </div>
+            <div class="col-lg-6 mb-5 mb-lg-0">
+              <a href="#" class="banner-1 h-100 d-flex" style="background-image: url({% static 'images/bg_2.jpg'%});">
+                <div class="banner-1-inner ml-auto  align-self-center">
+                  <h2>Эксперты говорят</h2>
+                  <p>Самым популярным и продаваемым лекарственным средством в период пандемии по количеству проданных упаковок стал парацетомол.
+                  </p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    
+
+{% endblock %}
